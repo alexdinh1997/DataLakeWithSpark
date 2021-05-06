@@ -46,4 +46,6 @@ We impletement with this following steps:
 
 ![Step 1](https://udacity-user-uploads.s3.us-west-2.amazonaws.com/uploads/user-uploads/6a156899-077c-48b2-b356-cf233e97d8d3-mobile.png)
 
+We go to *Access Managemement* then *Access key*
+
 ![Step 2](https://udacity-user-uploads.s3.us-west-2.amazonaws.com/uploads/user-uploads/29c25a25-a212-42ca-b324-51d2d2e4ad64-mobile.png)
