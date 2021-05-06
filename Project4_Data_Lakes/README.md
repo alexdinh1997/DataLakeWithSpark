@@ -147,3 +147,4 @@ We partion these 2 tables by Year and artist_id/Month to work with log files so 
 Run the etl.py on terminal with `python etl.py` to auto generate the file and check the tables on S3
 
 ## 4. Result
+![img](https://github.com/alexdinh1997/DataLakeWithSpark/blob/main/Project4_Data_Lakes/img/Screenshot%202021-05-06%20at%2014.48.24.png?raw=true)
