@@ -21,8 +21,8 @@ In this project, I apply:
 
 We will be working on 2 dataset that resides on S3. Links of S3 for each:
 
-- Song data: `s3://udacity-dend/song_data`
-- Log data: `s3://udacity-dend/log_data`  
+- Song data: `s3a://udacity-dend/song_data`
+- Log data: `s3a://udacity-dend/log_data`  
 ### Song dataset 
 The first dataset is a subset of real data from the Million Song Dataset. Each file is in JSON format and contains metadata about a song and the artist of that song. The files are partitioned by the first three letters of each song's track ID. For example, here are filepaths to two files in this dataset.
 
@@ -36,5 +36,14 @@ This is an example of what a single song files, look likes:
 ### Log dataset
 ## 4. Project instructions:
 ### a. Read data from S3, process that data using Spark and write back to S3
-- Read data from S3 of Udacity hosted by assign inputs with log and song
-- an environment with AWS 
+- Read data from S3 of Udacity hosted by assign inputs with log and song, process with Spark by SparkSession
+- an environment with AWS, using `dl.cfg`
+
+**NOTICE:**
+
+Remember to create ACCESS KEY on crendential **NOT ON IAM ROLE** because it got conflict with the s3 url from Udacity.
+We impletement with this following steps:
+
+![Step 1](https://udacity-user-uploads.s3.us-west-2.amazonaws.com/uploads/user-uploads/6a156899-077c-48b2-b356-cf233e97d8d3-mobile.png)
+
+![Step 2](https://udacity-user-uploads.s3.us-west-2.amazonaws.com/uploads/user-uploads/29c25a25-a212-42ca-b324-51d2d2e4ad64-mobile.png)
