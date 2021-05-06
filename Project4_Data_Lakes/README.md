@@ -136,3 +136,14 @@ root
  |-- songplay_id: long (nullable = false)
 ~~~~
 
+### c. Write ouput to S3:
+write tables to parquet files with:
+`name_table.write.parquet("{}name/name_table.parquet".format(output_data))`
+with output_data is the link of S3 from AWS.
+**Write on song and song_play tables**
+
+We partion these 2 tables by Year and artist_id/Month to work with log files so add `.partitionBy(element1,element2)`
+#### d. On terminal
+Run the etl.py on terminal with `python etl.py` to auto generate the file and check the tables on S3
+
+## 4. Result
