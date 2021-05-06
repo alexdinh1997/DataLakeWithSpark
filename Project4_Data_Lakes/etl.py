@@ -44,13 +44,13 @@ def process_song_data(spark, input_data, output_data):
     songs_table=df.select(col("song_id"),col("title"),col("artist_id"),col("year"),col("duration")).distinct()
     
     # write songs table to parquet files partitioned by year and artist
-    # songs_table.write.partitionBy("year", "artist_id").parquet("{}songs/songs_table.parquet".format(output_data))
+    songs_table.write.partitionBy("year", "artist_id").parquet("{}songs/songs_table.parquet".format(output_data))
 
     # extract columns to create artists table
     artists_table = df.select(col("artist_id"), col("artist_name"), col("artist_location"),col("artist_latitude"), col("artist_longitude")).distinct()
     
     # write artists table to parquet files
-    # artists_table.write.parquet("{}artists/artists_table.parquet".format(output_data))
+    artists_table.write.parquet("{}artists/artists_table.parquet".format(output_data))
     df.createOrReplaceTempView("song_table")
 
 def process_log_data(spark, input_data, output_data):
@@ -74,7 +74,7 @@ def process_log_data(spark, input_data, output_data):
     users_table = df.select(col("firstName"), col("lastName"), col("gender"), col("level"), col("userId")).distinct()
     
     # write users table to parquet files
-    # users_table.write.parquet("{}users/users_table.parquet".format(output_data))
+    users_table.write.parquet("{}users/users_table.parquet".format(output_data))
 
     # create timestamp and datetime columns from original timestamp column
     get_timestamp = udf(lambda x: datetime.fromtimestamp(x / 1000), TimestampType())
@@ -94,7 +94,7 @@ def process_log_data(spark, input_data, output_data):
     time_table = df.select(col("start_time"), col("hour"), col("day"), col("week"),col("month"), col("year"), col("weekday")).distinct()
     
     # write time table to parquet files partitioned by year and month
-    # time_table.write.partitionBy("year","month").parquet("{}time/time_table.parquet".format(output_data))
+    time_table.write.partitionBy("year","month").parquet("{}time/time_table.parquet".format(output_data))
 
     # read in song data to use for songplays table
     song_df = spark.sql("select distinct song_id, artist_id, artist_name from song_table")
