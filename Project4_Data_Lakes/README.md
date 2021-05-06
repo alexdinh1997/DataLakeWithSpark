@@ -34,6 +34,16 @@ This is an example of what a single song files, look likes:
 
 `{"num_songs": 1, "artist_id": "ARJIE2Y1187B994AB7", "artist_latitude": null, "artist_longitude": null, "artist_location": "", "artist_name": "Line Renaud", "song_id": "SOUPIRU12A6D4FA1E1", "title": "Der Kleine Dompfaff", "duration": 152.92036, "year": 0}`
 ### Log dataset
+These activity logs from an imaginary music stream app. The log files in the dataset are partitioned by year and month
+Here is the example:
+`log_data/2018/11/2018-11-12-events.json`
+
+And the dataframe of log files look like:
+![log_file](https://video.udacity-data.com/topher/2019/February/5c6c3f0a_log-data/log-data.png)
+
+### Output:
+Using our own S3 to store the data:
+`"s3a://aws-emr-resources-449629588483-us-west-2/sparkify/"`
 ## 4. Project instructions:
 ### a. Read data from S3, process that data using Spark and write back to S3
 - Read data from S3 of Udacity hosted by assign inputs with log and song, process with Spark by SparkSession
@@ -49,3 +59,80 @@ We impletement with this following steps:
 We go to *Access Managemement* then *Access key*
 
 ![Step 2](https://udacity-user-uploads.s3.us-west-2.amazonaws.com/uploads/user-uploads/29c25a25-a212-42ca-b324-51d2d2e4ad64-mobile.png)
+
+### b. Manipulate tables
+- Simplify and fasten the process on READ & WRITE S3 and to S3, test only with `/A/A/A/*` for data songs url
+- Read the files with `spark.read.json` drop the duplicates and cache() for lazy transformation. [Read more about cache](https://towardsdatascience.com/best-practices-for-caching-in-spark-sql-b22fb0f02d34). With logs input_data, we filter with `df.page=="NextSong"` for purpose of usage.
+- The above approach is applied for users_table, songs_table and artists_table
+Here are the Schemas:
+<h4>songs_table</h4>
+
+~~~~
+root
+ |-- artist_id: string (nullable = true)
+ |-- artist_latitude: double (nullable = true)
+ |-- artist_location: string (nullable = true)
+ |-- artist_longitude: double (nullable = true)
+ |-- artist_name: string (nullable = true)
+ |-- duration: double (nullable = true)
+ |-- num_songs: long (nullable = true)
+ |-- song_id: string (nullable = true)
+ |-- title: string (nullable = true)
+ |-- year: long (nullable = true)
+~~~~
+
+<h4>artists_table</h4>
+
+~~~~
+root
+ |-- artist_id: string (nullable = true)
+ |-- artist_name: string (nullable = true)
+ |-- artist_location: string (nullable = true)
+ |-- artist_latitude: double (nullable = true)
+ |-- artist_longitude: double (nullable = true)
+
+~~~~
+
+<h4>users_table</h4>
+
+~~~~
+root
+ |-- firstName: string (nullable = true)
+ |-- lastName: string (nullable = true)
+ |-- gender: string (nullable = true)
+ |-- level: string (nullable = true)
+ |-- userId: string (nullable = true)
+
+~~~~
+
+**Time table**
+- create timestamp and datetime with @udf with `get_timestamp` from column ts of the logs df.
+- after that, extract into a separate time_table with units of time
+
+~~~~
+root
+ |-- start_time: timestamp (nullable = true)
+ |-- hour: integer (nullable = true)
+ |-- day: integer (nullable = true)
+ |-- week: integer (nullable = true)
+ |-- month: integer (nullable = true)
+ |-- year: integer (nullable = true)
+ |-- weekday: integer (nullable = true)
+~~~~
+
+**Song_plays**
+- in this table, partition the table by year and month so we need to join the df_song and df_log with artist is primary key.
+
+~~~~
+root
+ |-- start_time: timestamp (nullable = true)
+ |-- userId: string (nullable = true)
+ |-- level: string (nullable = true)
+ |-- sessionId: long (nullable = true)
+ |-- location: string (nullable = true)
+ |-- userAgent: string (nullable = true)
+ |-- song_id: string (nullable = true)
+ |-- artist_id: string (nullable = true)
+ |-- songplay_id: long (nullable = false)
+~~~~
+
